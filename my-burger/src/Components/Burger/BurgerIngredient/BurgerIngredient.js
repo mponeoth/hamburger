@@ -38,7 +38,7 @@ class BurgerIngredient extends Component {
         }
 }
 //if we ever try to use the ingredient component without passing a type we will get an error 
-BurgerIngredient.PropTypes ={
+BurgerIngredient.propTypes ={
     type: PropTypes.string.isRequired
 };
 
