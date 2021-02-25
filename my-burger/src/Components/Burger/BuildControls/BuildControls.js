@@ -13,9 +13,14 @@ const buildControls = (props) => (
 
          <div className={classes.BuildControls}>
              {controls.map(ctrl =>(
-                 <BuildControl key={ctrl.label} labell={ctrl.label} /> //how many keys and label have it will show in  localhost
+                 <BuildControl 
+                 key={ctrl.label} 
+                 labell={ctrl.label}
+                 added={() =>props.ingredientAdded(ctrl.type)}
+                 
+                 /> //how many keys and label have it will show in  localhost
               ))}
-         </div>
+         </div> 
 );
 
 
