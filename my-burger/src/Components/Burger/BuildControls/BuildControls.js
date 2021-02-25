@@ -17,7 +17,8 @@ const buildControls = (props) => (
                  key={ctrl.label} 
                  labell={ctrl.label}
                  added={() =>props.ingredientAdded(ctrl.type)}
-                 
+                 remove={()=>props.ingredientRemoved(ctrl.type)}
+                 disabled={props.disabled[ctrl.type]}
                  /> //how many keys and label have it will show in  localhost
               ))}
          </div> 
