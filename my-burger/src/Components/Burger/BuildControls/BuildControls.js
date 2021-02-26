@@ -25,6 +25,9 @@ const buildControls = (props) => (
                  disabled={props.disabled[ctrl.type]}
                  /> //how many keys and label have it will show in  localhost
               ))}
+              <button 
+              className={classes.OrderButton}
+              disabled={!props.purchasable}>ORDER NOW</button>
          </div> 
 );
 

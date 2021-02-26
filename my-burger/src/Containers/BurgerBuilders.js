@@ -25,9 +25,25 @@ class  BurgerBuilders extends Component{
             cheese:0,
             meat:0,
         },
-        totalPrice:4
+        totalPrice:4,
+        purchasable:false
     }
     //we have to keep in mind  we cant use map because its not array  its object 
+    purhaceIngredient = (ingredients) =>{
+        
+        const sum = Object.keys(ingredients)
+        .map((igKey) =>{
+             return ingredients[igKey];  //igKey will be the amount because with ingredients 
+        })
+        .reduce((sum,el) =>{
+               return sum+el;
+        },0);//we ll use reduce bu this time not to flatten the array but to turn it into single number this is why we finished 0
+        
+        this.setState({purchasable: sum>0}) 
+        //if we have at least one ingredient its true then purchasable is true 
+    }
+
+
 
     addIngredientHandler = (type) =>{
         const oldCount = this.state.ingredients[type];
@@ -40,8 +56,10 @@ class  BurgerBuilders extends Component{
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice+priceAddition;
         this.setState({totalPrice: newPrice, ingredients:updatedIngredients})
-
+        this.purhaceIngredient(updatedIngredients);
     }
+
+
 
     removeIngredientHandler = (type) =>{
         const oldCount = this.state.ingredients[type];
@@ -57,6 +75,7 @@ class  BurgerBuilders extends Component{
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice - priceDeduction;
         this.setState({totalPrice: newPrice, ingredients:updatedIngredients})
+        this.purhaceIngredient(updatedIngredients)
 
     }
 
@@ -75,7 +94,8 @@ class  BurgerBuilders extends Component{
                 <BuildControls ingredientAdded={this.addIngredientHandler}
                                ingredientRemoved={this.removeIngredientHandler}
                                disabled={disabledInfo} 
-                               price={this.state.totalPrice}/>
+                               price={this.state.totalPrice}
+                               purchasable={this.state.purchasable}/>
             </AAux>
                
          );
