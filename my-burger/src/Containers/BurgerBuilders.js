@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import AAux from '../hoc/AAux'
 import Burger from '../Components/Burger/Burger'
 import BuildControls from '../Components/Burger/BuildControls/BuildControls'
+import Modal from '../Components/UI/Modal/Modal'
+import OrderSummary from '../../src/Components/Burger/OrderSummary/OrderSummary'
+
 
 const INGREDIENT_PRICES ={
     salad:0.5,
@@ -90,12 +93,16 @@ class  BurgerBuilders extends Component{
         //if its true should be disabled    {salad:true, meat:false, ... }
         return (
             <AAux>
+                <Modal> 
+                    <OrderSummary  ingredients ={this.state.ingredients}/>
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
-                <BuildControls ingredientAdded={this.addIngredientHandler}
-                               ingredientRemoved={this.removeIngredientHandler}
-                               disabled={disabledInfo} 
-                               price={this.state.totalPrice}
-                               purchasable={this.state.purchasable}/>
+                <BuildControls
+                 ingredientAdded={this.addIngredientHandler}
+                 ingredientRemoved={this.removeIngredientHandler}
+                 disabled={disabledInfo} 
+                 price={this.state.totalPrice}
+                 purchasable={this.state.purchasable}/>
             </AAux>
                
          );
