@@ -87,6 +87,9 @@ class  BurgerBuilders extends Component{
         this.setState({purchasing:true})
     }
 
+    purchasingCancelling = () =>{
+        this.setState({purchasing:false})
+    }
 
     render(){
         const disabledInfo = {
@@ -98,7 +101,7 @@ class  BurgerBuilders extends Component{
         //if its true should be disabled    {salad:true, meat:false, ... }
         return (
             <AAux>
-                <Modal show={this.state.purchasing}> 
+                <Modal show={this.state.purchasing} modalClosed={this.purchasingCancelling}> 
                     <OrderSummary  ingredients ={this.state.ingredients}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />

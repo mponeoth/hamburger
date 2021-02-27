@@ -1,8 +1,11 @@
 import React from 'react'
 import classes from './Modal.css'
+import AAux from '../../../hoc/AAux'
+import Backdrop from '../../../Components/UI/Backdrop/Backdrop'
 
 const Modal = (props) =>(
-               
+            <AAux>
+                <Backdrop show={props.show}   clicked={props.modalClosed}/>
             <div className={classes.Modal}
             style={{
                 transform:props.show  ? 'translateteY(0)' : 'translate(-10)',
@@ -10,6 +13,7 @@ const Modal = (props) =>(
             }}>
                 {props.children}
             </div>
+            </AAux>
 
 )
 
