@@ -8,7 +8,10 @@ const sideDrawer = (props) =>{
     //when we use return we must use { } curly braces 
     return(
         <div className={classes.SideDrawer}>
+            <div className={classes.Logo}> 
              <Logo />
+            </div>
+        
              <nav>
                  <NavigationItems />
              </nav>
