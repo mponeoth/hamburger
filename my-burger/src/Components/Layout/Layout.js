@@ -13,10 +13,18 @@ class  Layout extends Component {
             this.setState({showSideDrawer:false});
         }
 
+        DrawertoggleClicked = () =>{
+            this.setState((prevState)=> {
+                return {showSideDrawer :!prevState.showSideDrawer }
+            })
+        }
+//due to the asynchronous nature of set state this may lead to unexpected outcomes  prevstate
+//this is the clean way of setting the state  when it depends on old the state 
+
         render(){
             return  (
                   <AAux >
-                        <Toolbar />
+                        <Toolbar  DrawertoggleClicked={this.DrawertoggleClicked}/>
                         <SideDrawer   
                         open={this.state.showSideDrawer}
                         closed={this.sideDrawerClosedHanlder} />
