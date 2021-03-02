@@ -1,3 +1,13 @@
+//do we have any state or prop changes which trigger a re-rendering even though this might not be required
+//if we have a look at the running application, most clicks and things we do really change the UI and therefore
+//should trigger updates, should trigger a re-rendering of these components so we should not really lose performance
+//there and using a lot of pure components for unnecessary shouldComponentUpdate checks might even hit the performance
+//more than doing an occasional unnecessary re-rendering  
+//I can identify one element here though where  we might be able to save some performance by not re-rendering it unnecessarily
+//that is the modal component it wraps the order summary and that of course means that  whenever ingredients
+//or price changes since these are props of order summary, order summary will be re-rendered 
+
+
 import React, {Component} from 'react';
 import AAux from '../hoc/AAux'
 import Burger from '../Components/Burger/Burger'
@@ -30,6 +40,7 @@ class  BurgerBuilders extends Component{
         },
         totalPrice:4,
         purchasable:false,
+        
         purchasing:false
     }
     //we have to keep in mind  we cant use map because its not array  its object 
@@ -105,7 +116,9 @@ class  BurgerBuilders extends Component{
         //if its true should be disabled    {salad:true, meat:false, ... }
         return (
             <AAux>
-                <Modal show={this.state.purchasing} modalClosed={this.purchasingCancelling}> 
+                <Modal 
+                show={this.state.purchasing}
+                 modalClosed={this.purchasingCancelling}> 
                     <OrderSummary 
                      ingredients ={this.state.ingredients}
                      cancelling={this.purchasingCancelling}
