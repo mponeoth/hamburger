@@ -15,22 +15,28 @@ class Blog extends Component {
     componentDidMount(){
             axios.get('https://jsonplaceholder.typicode.com/posts')
             .then(response =>{
-                this.setState({Posts:response.data})
-                console.log(response)//when we use console.log we can see data  with setState we can  get our data
-             })
+                const  atama=  response.data.slice(0,4)
+                const updatedPosts = atama.map(post =>{
+                    return  {
+                        ...post, author:'muhammet'
+                } 
+                })
+                this.setState({Posts:updatedPosts})
+                //console.log(response) inside of response data we get only for data with slice method
+            })
     }
 
     render () {
  
             const Postsa =this.state.Posts.map(post =>
-                {return <Post key={post.id} title={post.title}/>} )
+                {return <Post key={post.id} title={post.title} Author={post.author}/>} )
 
         return (
             <div>
                 <section className="Posts">
 
                     {Postsa}
-                    
+
                 </section>
                 <section>
                     <FullPost />
