@@ -10,11 +10,12 @@ class Blog extends Component {
 
         state = {
             Posts:[],
-            selectedpostsID:null
+            selectedpostsID:null,
+            error:false
         }
 
     componentDidMount(){
-            axios.get('https://jsonplaceholder.typicode.com/posts')
+            axios.get('https://jsonplaceholder.typicode.com/postssss')
             .then(response =>{
                 const  atama=  response.data.slice(0,4)
                 const updatedPosts = atama.map(post =>{
@@ -24,6 +25,9 @@ class Blog extends Component {
                 })
                 this.setState({Posts:updatedPosts})
                 //console.log(response) inside of response data we get only for data with slice method
+            }) .catch(error =>{
+                //console.log(error)
+                this.setState({error:true})
             })
     }
 
@@ -33,32 +37,43 @@ class Blog extends Component {
  
 
     render () {
- 
-            const Postsa =this.state.Posts.map(post =>
-                {return <Post
+            let Postsa = <div>something bad happened</div>
+
+        if(!this.state.error){
+            
+                     Postsa =this.state.Posts.map(post =>
+                    {return <Post
                      key={post.id} 
                      title={post.title}
                      Author={post.author}
                      clicked={()=>this.postSelectedHandler(post.id)} />} )
 
-        return (
-            <div>
-                <section className="Posts">
+                   
+                }
+                return (
+                    <div>
+                        <section className="Posts">
+        
+                            {Postsa}
+        
+                        </section>
+                        <section>
+                            <FullPost 
+                             id={this.state.selectedpostsID}/>
+                        </section>
+                        <section>
+                            <NewPost />
+                        </section>
+                    </div>
+                );        
+                
+            }
+          
 
-                    {Postsa}
+        }
 
-                </section>
-                <section>
-                    <FullPost 
-                     id={this.state.selectedpostsID}/>
-                </section>
-                <section>
-                    <NewPost />
-                </section>
-            </div>
-        );
-    }
-}
+
+       
 
 export default Blog;
 
