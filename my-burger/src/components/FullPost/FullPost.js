@@ -11,7 +11,7 @@ class FullPost extends Component {
     componentDidUpdate (){//this.state.loadPost didnot work(because of null) !this.state.loadedPost || this is why we got it like this if something true then true means 
         if(this.props.id){//first we get the ID and then little bit later we get the little bit post but we rerun it in the dom immediately
             if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)){
-                 axios.get('https://jsonplaceholder.typicode.com/posts/'+this.props.id)
+                 axios.get('/posts/'+this.props.id)
             .then(response =>{
                 this.setState({loadedPost:response.data})
                 console.log(response);
@@ -22,7 +22,7 @@ class FullPost extends Component {
      }
 
      deletePostHandler = () =>{
-         axios.delete('https://jsonplaceholder.typicode.com/posts/'+this.props.id)
+         axios.delete('/posts/'+this.props.id)
          .then(response =>{
              console.log(response)
          })
