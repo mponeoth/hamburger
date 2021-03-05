@@ -34,33 +34,17 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
-// Create two seperate files for css and cssmodules this allow for
-// different settings to be used with ExtractTextPlugin.
+// Note: defined here because it will be used more than once.
 const cssFilename = 'static/css/[name].[contenthash:8].css';
-const cssModulesFilename = 'static/css/[name]-cssmodules.[contenthash:8].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
 // However, our output is structured with css, js and media folders.
 // To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginCSSOptions = shouldUseRelativeAssetPaths
+const extractTextPluginOptions = shouldUseRelativeAssetPaths
   ? // Making sure that the publicPath goes back to to build folder.
     { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
-
-const extractTextPluginCSSModulesOptions = shouldUseRelativeAssetPaths
-  ? // Making sure that the publicPath goes back to to build folder.
-  { publicPath: Array(cssModulesFilename.split('/').length).join('../') }
-  : {};
-
-const ExtractTextPluginCSS = new ExtractTextPlugin({
-  filename: cssFilename,
-})
-
-const ExtractTextPluginCSSModules = new ExtractTextPlugin({
-  filename: cssModulesFilename,
-  ignoreOrder: true,
-})
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -104,7 +88,7 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
       
       // Support React Native Web
@@ -130,7 +114,7 @@ module.exports = {
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
-        test: /\.(js|jsx|mjs)$/,
+        test: /\.(js|jsx)$/,
         enforce: 'pre',
         use: [
           {
@@ -161,7 +145,7 @@ module.exports = {
           },
           // Process JS with Babel.
           {
-            test: /\.(js|jsx|mjs)$/,
+            test: /\.(js|jsx)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
@@ -182,8 +166,8 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.module.css$/,
-            loader: ExtractTextPluginCSSModules.extract(
+            test: /\.css$/,
+            loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
                   fallback: require.resolve('style-loader'),
@@ -192,11 +176,10 @@ module.exports = {
                       loader: require.resolve('css-loader'),
                       options: {
                         importLoaders: 1,
-                        modules: true,
-                        localIdentName: '[path]__[name]___[local]',
                         minimize: true,
                         sourceMap: shouldUseSourceMap,
-                       
+                        modules: true,
+                        localIdentName: '[name]__[local]__[hash:base64:5]'
                       },
                     },
                     {
@@ -221,64 +204,14 @@ module.exports = {
                     },
                   ],
                 },
-                extractTextPluginCSSModulesOptions
-              )
-            ),
-            // Note: this won't work without `ExtractTextPluginCSSModules` in `plugins`.
-          },
-          {
-            test: /\.css$/,
-            exclude: /\.module\.css$/,
-            loader: ExtractTextPluginCSS.extract(
-              Object.assign(
-                {
-                  fallback: {
-                    loader: require.resolve('style-loader'),
-                    options: {
-                      hmr: false,
-                    },
-                  },
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                        modules: true,
-                        localIdentName:'[name]__[local]__[hash:base64:5]'
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                  ],
-                },
-                extractTextPluginCSSOptions
+                extractTextPluginOptions
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
-          // This loader doesn't use a "test" so it will catch all modules
+          // This loader don't uses a "test" so it will catch all modules
           // that fall through the other loaders.
           {
             loader: require.resolve('file-loader'),
@@ -286,7 +219,7 @@ module.exports = {
             // it's runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            exclude: [/\.js$/, /\.html$/, /\.json$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
@@ -336,9 +269,6 @@ module.exports = {
         // https://github.com/mishoo/UglifyJS2/issues/2011
         comparisons: false,
       },
-      mangle: {
-        safari10: true,
-      },
       output: {
         comments: false,
         // Turned on because emoji and regex is not minified properly using default
@@ -348,10 +278,9 @@ module.exports = {
       sourceMap: shouldUseSourceMap,
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    // We have two ExtractTextPlugins to allow for different settings for
-    // cssmodules and regular css
-    ExtractTextPluginCSS,
-    ExtractTextPluginCSSModules,
+    new ExtractTextPlugin({
+      filename: cssFilename,
+    }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
