@@ -5,6 +5,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -80,9 +81,32 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: false});
     }
 
+   
     purchaseContinueHandler = () => {
-        alert('You continue!');
-    }
+        const order = {
+            ingredients:this.state.ingredients,
+            price:this.state.price,
+            customer : {
+                name:'muhammet kuruoglu',
+                address:{
+                    street:'57 reed road' ,
+                    zipCode:'37zb3434',
+                    country: 'Turkey'
+                },
+                email:'mponeoth@gmail.com'
+            },
+            deliveryMethod:'fastest'
+        }
+
+        //alert('You continue!');//i can add any name instead orders it depends on me //thats the url i want to send a request to the URL which gets appended to my base URL or path which gets appended to our base URL 
+        axios.post('/orders.json',order)//its going to create our orders node and store our orders beneath that node 
+        .then(response =>{
+            console.log(response)
+        })
+        .catch(error =>{
+               console.log(error) 
+        })
+    }   
 
     render () {
         const disabledInfo = {
