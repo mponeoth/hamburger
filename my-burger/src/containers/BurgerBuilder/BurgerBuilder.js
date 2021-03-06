@@ -6,6 +6,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders'
+import Spinner from '../../components/UI/Spinner/Spinner'
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -28,7 +29,8 @@ class BurgerBuilder extends Component {
         },
         totalPrice: 4,
         purchasable: false,
-        purchasing: false
+        purchasing: false,
+        loading:false
     }
 
     updatePurchaseState (ingredients) {
@@ -83,13 +85,15 @@ class BurgerBuilder extends Component {
 
    
     purchaseContinueHandler = () => {
+
+        this.setState({loading:true})//i want to call this setState and set loading to true of course no we are loading the request
         const order = {
             ingredients:this.state.ingredients,
             price:this.state.price,
             customer : {
                 name:'muhammet kuruoglu',
                 address:{
-                    street:'57 reed road' ,
+                    street:'57 reed road',
                     zipCode:'37zb3434',
                     country: 'Turkey'
                 },
@@ -101,11 +105,12 @@ class BurgerBuilder extends Component {
         //alert('You continue!');//i can add any name instead orders it depends on me //thats the url i want to send a request to the URL which gets appended to my base URL or path which gets appended to our base URL 
         axios.post('/orders.json',order)//its going to create our orders node and store our orders beneath that node 
         .then(response =>{
-            console.log(response)
+            this.setState({loading:false, purchasing:false});
         })
         .catch(error =>{
-               console.log(error) 
-        })
+            this.setState({loading:false, purchasing:false});//if an error occured we want to stop loading we dont want to spinner anymore because ui would be stuck in this case  
+
+        });
     }   
 
     render () {
@@ -116,14 +121,20 @@ class BurgerBuilder extends Component {
             disabledInfo[key] = disabledInfo[key] <= 0
         }
         // {salad: true, meat: false, ...}
+
+        let orderSummary =  <OrderSummary 
+        ingredients={this.state.ingredients}
+        price={this.state.totalPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler} />
+        if(this.state.loading){
+             orderSummary = <Spinner />;
+        }
+
         return (
             <AAux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    <OrderSummary 
-                        ingredients={this.state.ingredients}
-                        price={this.state.totalPrice}
-                        purchaseCancelled={this.purchaseCancelHandler}
-                        purchaseContinued={this.purchaseContinueHandler} />
+                    {orderSummary}
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
