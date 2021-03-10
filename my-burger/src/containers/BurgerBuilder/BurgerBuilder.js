@@ -5,8 +5,10 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import axios from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
+import axios from '../../axios-orders'
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -82,7 +84,6 @@ class BurgerBuilder extends Component {
     purchaseCancelHandler = () => {
         this.setState({purchasing: false});
     }
-
    
     purchaseContinueHandler = () => {
 
@@ -103,7 +104,7 @@ class BurgerBuilder extends Component {
         }
 
         //alert('You continue!');//i can add any name instead orders it depends on me //thats the url i want to send a request to the URL which gets appended to my base URL or path which gets appended to our base URL 
-        axios.post('/orders.json',order)//its going to create our orders node and store our orders beneath that node 
+        axios.post('/orders',order)//its going to create our orders node and store our orders beneath that node 
         .then(response =>{
             this.setState({loading:false, purchasing:false});
         })
@@ -149,4 +150,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder,axios);
