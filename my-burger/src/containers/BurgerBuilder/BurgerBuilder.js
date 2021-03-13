@@ -8,7 +8,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner'
 import axios from '../../axios-orders'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
-
+ 
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -23,17 +23,26 @@ class BurgerBuilder extends Component {
     //     this.state = {...}
     // }
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients:null,
         totalPrice: 4,
         purchasable: false,
         purchasing: false,
-        loading:false
+        loading:false,
+        error:false
     }
+
+    //it will get error because first ingredients is null 
+    componentDidMount(){
+        axios.get('https://react-my-burger-b9d53-default-rtdb.firebaseio.com/ingredients.json')    //we need to append .json//but when we make a mistake we dont get any error message its not cool 
+        .then(response =>{
+            this.setState({ingredients:response.data})
+            console.log(response)
+        })
+        .catch(error =>{
+            this.setState({error:true})
+        })
+    }
+
 
     updatePurchaseState (ingredients) {
         const sum = Object.keys( ingredients )
@@ -104,7 +113,7 @@ class BurgerBuilder extends Component {
         }
 
         //alert('You continue!');//i can add any name instead orders it depends on me //thats the url i want to send a request to the URL which gets appended to my base URL or path which gets appended to our base URL 
-        axios.post('/orders',order)//its going to create our orders node and store our orders beneath that node 
+        axios.post('/orders.json',order)//its going to create our orders node and store our orders beneath that node 
         .then(response =>{
             this.setState({loading:false, purchasing:false});
         })
@@ -123,20 +132,14 @@ class BurgerBuilder extends Component {
         }
         // {salad: true, meat: false, ...}
 
-        let orderSummary =  <OrderSummary 
-        ingredients={this.state.ingredients}
-        price={this.state.totalPrice}
-        purchaseCancelled={this.purchaseCancelHandler}
-        purchaseContinued={this.purchaseContinueHandler} />
-        if(this.state.loading){
-             orderSummary = <Spinner />;
-        }
+        let orderSummary =  null;
 
-        return (
-            <AAux>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    {orderSummary}
-                </Modal>
+       
+        let burger  = this.state.error ? <p>sorry we Did not react out to page </p> : <Spinner /> 
+
+        if(this.state.ingredients){
+             burger = (
+                <AAux>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}
@@ -145,6 +148,25 @@ class BurgerBuilder extends Component {
                     purchasable={this.state.purchasable}
                     ordered={this.purchaseHandler}
                     price={this.state.totalPrice} />
+                </AAux>
+            )
+        orderSummary= <OrderSummary 
+        ingredients={this.state.ingredients}
+        price={this.state.totalPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler} />
+        }
+        
+        if(this.state.loading){
+            orderSummary = <Spinner />;
+       }
+
+        return (
+            <AAux>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                    {orderSummary}
+                </Modal>
+                {burger}
             </AAux>
         );
     }

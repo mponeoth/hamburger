@@ -7,13 +7,12 @@ const withErrorHandler = (WrappedComponent ,axios ) => {
                 state={
                     error:null
                 };
-
-            componentDidMount(){
+//componentWillMount yani render isleminden hemen once  tetiklenen  eventtir Render fonksiyonu daha sonra calisacagi icin SetState Fonksiyonu calismaz 
+            componentWillMount(){
             axios.interceptors.request.use(req=>{
                 this.setState({error:null});
                 return req;
             });
-
             axios.interceptors.response.use(res=>res,error=>{
                 this.setState({error:error});
             });//second argument i am interested in
