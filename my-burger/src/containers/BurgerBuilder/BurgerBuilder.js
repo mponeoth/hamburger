@@ -171,5 +171,6 @@ class BurgerBuilder extends Component {
         );
     }
 }
-
+//every time we call withErrorHandler on the element we re exporting as we do in the burger builder 
+//they leak memory because thats code that still runs that is not required  	intercept :engel olmak
 export default withErrorHandler(BurgerBuilder,axios);
