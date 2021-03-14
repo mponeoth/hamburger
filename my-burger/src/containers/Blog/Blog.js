@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 // import axios from 'axios';
- import './Blog.css';
- 
+import './Blog.css';
+import Posts from '../../containers/Blog/Posts/Posts' 
+import NewPost from './NewPost/NewPost'
+
 class Blog extends Component {
    
 
@@ -20,11 +22,10 @@ class Blog extends Component {
     
                         </nav>
                    </header>
-                    <Route path="/" exact render={()=> <h1>Home</h1>} />
-                    <Route path="/" exact render={()=> <h1>Home2</h1>} />
-  {/* without exact(o sayfaya ozgu) exact means only for this (/) page it can be shown if we dont exact we see that link all pages   */}
- {/* we want to load posts component we already turned on routing in the app.js by wrapping everything with the browser router  */}
-{/* in the blog component where i want to load my different pages i need to import something else from       */}
+                    <Route path="/" exact component={Posts} />
+                    <Route path="/new-post"  component={NewPost} />
+                    {/* here that is the default case which will use a lot */}
+{/* here simply to what we import from the posts component what we previously directly used in jsx  we simply parsed this curly braces like that   */}
                 </div>
             );
         }
