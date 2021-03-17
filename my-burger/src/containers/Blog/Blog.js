@@ -26,8 +26,8 @@ class Blog extends Component {
     
                         </nav>
                    </header>
-                    {/* <Route path="/" exact component={Posts} />  //to show this i comment in github
-                    // <Route path="/new-post"  component={NewPost} /> */} //to show this i comment in github
+                    <Route path="/" exact component={Posts} />
+                    <Route path="/new-post"  component={NewPost} />
                     {/* here that is the default case which will use a lot */}
 {/* here simply to what we import from the posts component what we previously directly used in jsx  we simply parsed this curly braces like that   */}
                 </div>

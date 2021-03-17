@@ -9,7 +9,10 @@ class Posts extends Component{
         posts: [],
        
     }
+
+    //if we check console we see what type of information give us react router 
     componentDidMount () {
+        console.log(this.props)
         axios.get( '/posts' )
             .then( response => {
                 const posts = response.data.slice(0, 4);
