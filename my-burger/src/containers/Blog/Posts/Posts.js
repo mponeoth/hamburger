@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from '../../../axios';
+import { Link } from 'react-router-dom'
 import Post from '../../../components/Post/Post';
 import './Posts.css';
 
@@ -39,12 +40,15 @@ class Posts extends Component{
         let posts = <p style={{textAlign: 'center'}}>Something went wrong!</p>;
         if (!this.state.error) {
             posts = this.state.posts.map(post => {
-                return <Post 
-                    key={post.id} 
-                    title={post.title} 
-                    author={post.author}
-                    //{...this.props} this is another way we can information about react-router information like match history location staticContext
-                    clicked={() => this.postSelectedHandler(post.id)} />;
+                return (
+                <Link to={'/' + post.id} key={post.id} >
+                        <Post 
+                        title={post.title} 
+                        author={post.author}
+                        //{...this.props} this is another way we can information about react-router information like match history location staticContext
+                        clicked={() => this.postSelectedHandler(post.id)}/>
+                </Link>);
+    //when clicking on this i actually now want to load the full post for this we of course also need to determine where this full post should be shown  
             });
         }
        

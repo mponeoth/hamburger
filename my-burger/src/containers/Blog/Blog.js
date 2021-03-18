@@ -6,6 +6,8 @@ import { Route, NavLink } from 'react-router-dom';
 import './Blog.css';
 import Posts from '../../containers/Blog/Posts/Posts' 
 import NewPost from './NewPost/NewPost'
+import FullPost from './FullPost/FullPost'
+
 
 class Blog extends Component {
    
@@ -36,8 +38,11 @@ class Blog extends Component {
     
                         </nav>
                    </header>
+    {/* its parsed from top to bottom so new post is recognized first and this doesnot accidently catch this because new posts of course could be interpreted as an ID  */}
+     
                     <Route path="/" exact component={Posts} />
                     <Route path="/new-post"  component={NewPost} />
+                    <Route path="/:id"  component={FullPost} />
                     {/* here that is the default case which will use a lot */}
 {/* here simply to what we import from the posts component what we previously directly used in jsx  we simply parsed this curly braces like that   */}
                 </div>
