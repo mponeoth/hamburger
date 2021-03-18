@@ -1,6 +1,7 @@
 //npm install --save react-router react-router-dom installed first because we want to use react-router
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
+//this of course now allows us to apply some styling  
 // import axios from 'axios';
 import './Blog.css';
 import Posts from '../../containers/Blog/Posts/Posts' 
@@ -15,19 +16,22 @@ class Blog extends Component {
                    <header>
                         <nav>
                             <ul>
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to={{
+                {/* when we use the exact we prevent effectting both as a color because in new-post we use / as well  */}
+                {/* activeClassName="my-active" to get active homepage */}
+                                <li><NavLink
+                                 to="/" 
+                                 exact
+                                 activeClassName="my-active"
+                                 activeStyle={{
+                                     color:'#fa923f',
+                                     textDecoration:'underline'}}>Home</NavLink></li>
+                                {/* this is how we can style the active links  we have to use NavLink  */}
+                                <li><NavLink to={{
                                     pathname:'/new-post',
-//absolute path is always appended to your domain if you navigate to /new-post that simply means always attach /new-post right after the domain 
-//Use relative paths if you want to navigate relative to your existing path. full path is called the absolute path  that means that it tells every step that has to be taken from root 
-//or absolute beginning of file system 
-//absolute path : /home/philip/ocean/clam  relative path:clam 
-//absolute path : /home/philip/ocean/clam/giant relative path:clam/giant
 
                                     hash:'#submit',
                                     searc:'?quick-submit=true'
-                                }}>New-post</Link></li>
-        {/* when loading same page again its still react rendering the javascript to dom but no spinning */}
+                                }}>New-post</NavLink></li>
                             </ul>
     
                         </nav>
