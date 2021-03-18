@@ -18,6 +18,12 @@ class Blog extends Component {
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to={{
                                     pathname:'/new-post',
+//absolute path is always appended to your domain if you navigate to /new-post that simply means always attach /new-post right after the domain 
+//Use relative paths if you want to navigate relative to your existing path. full path is called the absolute path  that means that it tells every step that has to be taken from root 
+//or absolute beginning of file system 
+//absolute path : /home/philip/ocean/clam  relative path:clam 
+//absolute path : /home/philip/ocean/clam/giant relative path:clam/giant
+
                                     hash:'#submit',
                                     searc:'?quick-submit=true'
                                 }}>New-post</Link></li>
