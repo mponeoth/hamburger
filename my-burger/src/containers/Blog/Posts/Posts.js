@@ -43,6 +43,7 @@ class Posts extends Component{
                     key={post.id} 
                     title={post.title} 
                     author={post.author}
+                    //{...this.props} this is another way we can information about react-router information like match history location staticContext
                     clicked={() => this.postSelectedHandler(post.id)} />;
             });
         }
