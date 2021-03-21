@@ -6,7 +6,6 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 import './Blog.css';
 import Posts from '../../containers/Blog/Posts/Posts' 
 import NewPost from './NewPost/NewPost'
-import FullPost from './FullPost/FullPost'
 
 
 class Blog extends Component {
@@ -21,8 +20,8 @@ class Blog extends Component {
                 {/* when we use the exact we prevent effectting both as a color because in new-post we use / as well  */}
                 {/* activeClassName="my-active" to get active homepage */}
                                 <li><NavLink
-                                 to="/" 
-                                 exact
+                                 to="/posts/" 
+                                 exact //(exact) we typically use more specific routes like /posts though so this shouldnot be an issue 
                                  activeClassName="my-active"
                                  activeStyle={{
                                      color:'#fa923f',
@@ -39,10 +38,9 @@ class Blog extends Component {
                         </nav>
                    </header>
     {/* its parsed from top to bottom so new post is recognized first and this doesnot accidently catch this because new posts of course could be interpreted as an ID  */}
-                 <Route path="/" exact component={Posts} />     
                     <Switch>
                         <Route path="/new-post"  component={NewPost} />
-                        <Route path="/:id"  component={FullPost} />               
+                        <Route path="/posts/"  component={Posts} />     
                     </Switch>           
 {/* when we use only slash (/) :id we can see the id in other page but we want only see which we click we should use swich router to prevent mixing pages */}
                     {/* here that is the default case which will use a lot */}
