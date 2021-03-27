@@ -1,6 +1,6 @@
 //npm install --save react-router react-router-dom installed first because we want to use react-router
 import React, { Component } from 'react';
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 //this of course now allows us to apply some styling  
 // import axios from 'axios';
 import './Blog.css';
@@ -40,7 +40,10 @@ class Blog extends Component {
     {/* its parsed from top to bottom so new post is recognized first and this doesnot accidently catch this because new posts of course could be interpreted as an ID  */}
                     <Switch>
                         <Route path="/new-post"  component={NewPost} />
-                        <Route path="/posts/"  component={Posts} />     
+                        <Route path="/posts"  component={Posts} />     
+                        <Redirect from="/" to="/posts" />   
+                        {/* when we are in "/" it will Redirect us to "/posts" directly */}
+                        {/* <Route path="/"  component={Posts} />      */}
                     </Switch>           
 {/* when we use only slash (/) :id we can see the id in other page but we want only see which we click we should use swich router to prevent mixing pages */}
                     {/* here that is the default case which will use a lot */}
