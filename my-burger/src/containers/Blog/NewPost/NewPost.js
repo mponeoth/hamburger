@@ -25,7 +25,9 @@ class NewPost extends Component {
         axios.post('/posts', data)
             .then(response => {
                 console.log(response);
-                this.setState({submitted:true});
+                this.props.history.push('/posts') //we can use three of them as we want it depends on us to redirect to '/posts' 
+                //second way condition   this.props.history.replace('/posts');
+                //this.setState({submitted:true});
             });
     }
 
