@@ -9,7 +9,9 @@ import NewPost from './NewPost/NewPost'
 
 
 class Blog extends Component {
-   
+        state ={
+            auth:false
+        }
 
         render(){
             return (
@@ -39,9 +41,11 @@ class Blog extends Component {
                    </header>
     {/* its parsed from top to bottom so new post is recognized first and this doesnot accidently catch this because new posts of course could be interpreted as an ID  */}
                     <Switch>
-                        <Route path="/new-post"  component={NewPost} />
+                       {this.state.auth ? <Route path="/new-post"  component={NewPost} /> :null} 
                         <Route path="/posts"  component={Posts} />     
-                        <Redirect from="/" to="/posts" />   
+                        <Route render={()=><h1> not Found </h1>} />
+                        {/* when the page is not found it will be shown like this message not found  */}
+                        {/* <Redirect from="/" to="/posts" />    */}
                         {/* when we are in "/" it will Redirect us to "/posts" directly */}
                         {/* <Route path="/"  component={Posts} />      */}
                     </Switch>           
