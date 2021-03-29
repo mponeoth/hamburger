@@ -5,12 +5,17 @@ import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 // import axios from 'axios';
 import './Blog.css';
 import Posts from '../../containers/Blog/Posts/Posts' 
-import NewPost from './NewPost/NewPost'
-
+//import NewPost from './NewPost/NewPost'
+import asyncComponent from '../../hoc/AsyncComponent.js';
+const AsyncNewPost =  asyncComponent(()=>{
+    return import('./NewPost/NewPost');
+});
+//we dont want to include it in the bundle we want to load it when needed 
+//this is how we load components asynchronously this is extremely useful in bigger apps where there are bigger chunks of code
 
 class Blog extends Component {
         state ={
-            auth:false
+            auth:true
         }
 
         render(){
@@ -41,7 +46,7 @@ class Blog extends Component {
                    </header>
     {/* its parsed from top to bottom so new post is recognized first and this doesnot accidently catch this because new posts of course could be interpreted as an ID  */}
                     <Switch>
-                       {this.state.auth ? <Route path="/new-post"  component={NewPost} /> :null} 
+                       {this.state.auth ? <Route path="/new-post"  component={AsyncNewPost} /> :null} 
                         <Route path="/posts"  component={Posts} />     
                         <Route render={()=><h1> not Found </h1>} />
                         {/* when the page is not found it will be shown like this message not found  */}
