@@ -116,7 +116,18 @@ class BurgerBuilder extends Component {
         //         this.setState( { loading: false, purchasing: false } );
         //     } ); 
         //because i dont want to store them in firebase i went to go to checkout instead  
-        this.props.history.push('/checkout')
+
+        //1)way this.props.history.push('/checkout')
+        const queryParams = [];
+        for (let i in this.state.ingredients){
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))   
+        }
+        const queryString = queryParams.join('&')
+        this.props.history.push({
+            pathname:'/checkout',
+            search:'?' + queryString
+            //now you can see that i do pass it on like this in the URL
+        });
     }
 
     render () {
