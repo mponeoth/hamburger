@@ -31,8 +31,8 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount () {
-        console.log(this.props)
-        axios.get( '/ingredients.json' )
+        console.log(this.props);
+        axios.get( 'https://react-my-burger-b9d53-default-rtdb.firebaseio.com/ingredients.json' )
             .then( response => {
                 this.setState( { ingredients: response.data } );
             } )
@@ -92,19 +92,17 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-
-
-        //1)way this.props.history.push('/checkout')
+        // alert('You continue!');
+        
         const queryParams = [];
-        for (let i in this.state.ingredients){
-            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))   
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
         }
         queryParams.push('price=' + this.state.totalPrice);
-        const queryString = queryParams.join('&')
+        const queryString = queryParams.join('&');
         this.props.history.push({
-            pathname:'/checkout',
-            search:'?' + queryString
-            //now you can see that i do pass it on like this in the URL
+            pathname: '/checkout',
+            search: '?' + queryString
         });
     }
 
